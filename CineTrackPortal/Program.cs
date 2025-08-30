@@ -25,6 +25,10 @@ namespace CineTrackPortal
             builder.Services.Configure<EmailSettingsModel>(builder.Configuration.GetSection("EmailSettings"));
             builder.Services.AddTransient<IEmailService, EmailService>();
 
+            builder.Services.AddScoped<IMoviesService, MoviesRepository>();
+            builder.Services.AddScoped<IActorsService, ActorsRepository>();
+            builder.Services.AddScoped<IUsersService, UsersRepository>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
