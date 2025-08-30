@@ -21,6 +21,9 @@ namespace CineTrackPortal
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
+            builder.Services.Configure<EmailService>(builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.AddTransient<IEmailService, EmailService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
