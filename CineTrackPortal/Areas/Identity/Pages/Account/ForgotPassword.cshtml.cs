@@ -21,11 +21,13 @@ namespace CineTrackPortal.Areas.Identity.Pages.Account
     {
         private readonly UserManager<ExtendedUserModel> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly IEmailService _emailService;
 
-        public ForgotPasswordModel(UserManager<ExtendedUserModel> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<ExtendedUserModel> userManager, IEmailSender emailSender, IEmailService emailService)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -71,7 +73,7 @@ namespace CineTrackPortal.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
+                await _emailService.SendEmailAsync(
                     Input.Email,
                     "Reset Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
