@@ -1,0 +1,36 @@
+﻿@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
+    {
+        Layout = parentLayout.ToString();
+    }
+    else
+    {
+        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    }
+}
+
+<div class="wrapper d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="card narrow-card shadow-lg" style="margin-top: 60px; border-radius: 20px; width: 100%; max-width: 1000px; border: none;">
+        <div class="card-body p-5">
+            <h2 class="text-center mb-2 fw-bold" style="color: #258cfb; letter-spacing: 1px;">Manage your account</h2>
+            <h5 class="text-center mb-4" style="color: #6a82fb; font-weight: 500;">Change your account settings</h5>
+            <hr class="mb-4" style="border-top: 2px solid #e3eafc;" />
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="bg-white border-0 rounded-4 p-3 h-100 shadow-sm" style="min-height: 200px;">
+                        <partial name="_ManageNav" />
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="bg-white border-0 rounded-4 p-4 h-100 shadow-sm" style="min-height: 300px;">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
