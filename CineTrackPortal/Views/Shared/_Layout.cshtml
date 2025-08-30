@@ -1,48 +1,77 @@
-﻿<!DOCTYPE html>
+﻿﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CineTrackPortal</title>
+    <base href="~/" />
+    <title>@ViewData["Title"] - Health e-Monitoring</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CineTrackPortal.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Patient_Vital_Signs_Monitoring.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CineTrackPortal</a>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm custom-navbar">
+            <div class="container-fluid d-flex justify-content-end">
+                <a class="navbar-brand text-white ms-3" href="/">
+                    <i class="bi bi-heart-pulse"
+                       style="font-size: 2.5rem;"
+                       data-bs-toggle="tooltip"
+                       data-bs-custom-class="custom-tooltip"
+                       title="CineTrack Portal"></i>
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+    <div class="wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h4>Menu</h4>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="/"><i class="bi bi-house-door"></i> Home</a></li>
+                <li>
+                    <a class="btn btn-link sidebar-main-btn" data-bs-toggle="collapse" href="#submenuExample" role="button" aria-expanded="false" aria-controls="submenuExample">
+                        <i class="bi bi-folder"></i> Access Database
+                    </a>
+                    <div class="collapse" id="submenuExample">
+                        <div class="btn-group-vertical w-auto ms-4">
+                            <a class="btn mb-1 text-start" href="/patients">Display Patients</a>
+                            <a class="btn mb-1 text-start" href="/simulation">Simulation Actions</a>
+                            <a class="btn mb-1 text-start" href="/export">Export Data</a>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="/about"><i class="bi bi-info-circle"></i> About</a></li>
+            </ul>
+        </nav>
+        <div class="content container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - CineTrackPortal - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer bg-dark text-white border-top mt-auto py-2">
+        <div class="container text-center">
+            <small>
+                &copy; 2025 - CineTrack Portal -
+                <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-white text-decoration-none">Privacy</a>
+            </small>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
