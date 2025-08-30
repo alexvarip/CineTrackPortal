@@ -79,11 +79,8 @@ namespace CineTrackPortal.Areas.Identity.Pages.Account.Manage
             var email = await _userManager.GetEmailAsync(user);
             Email = email;
 
-            Input = new InputModel
-            {
-                NewEmail = email,
-            };
-
+            Input = new InputModel();
+           
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
         }
 

@@ -9,20 +9,92 @@
     }
 }
 
-<div class="wrapper d-flex align-items-center justify-content-center" style="min-height: 80vh;">
-    <div class="card narrow-card shadow-lg" style="margin-top: 60px; border-radius: 20px; width: 100%; max-width: 1000px; border: none;">
-        <div class="card-body p-5">
-            <h2 class="text-center mb-2 fw-bold" style="color: #258cfb; letter-spacing: 1px;">Manage your account</h2>
-            <h5 class="text-center mb-4" style="color: #6a82fb; font-weight: 500;">Change your account settings</h5>
-            <hr class="mb-4" style="border-top: 2px solid #e3eafc;" />
+<style>
+    /* Scoped styles for Manage area */
+    .manage-wrapper {
+        min-height: 80vh;
+        padding: 1.25rem 0;
+    }
+
+    .manage-card {
+        border-radius: 20px;
+        max-width: 1000px;
+        width: 100%;
+        border: none;
+        overflow: hidden;
+    }
+
+        .manage-card .card-body {
+            padding: 2.5rem;
+            background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+        }
+
+    .manage-hero {
+        background: linear-gradient(90deg, #258cfb 0%, #6a82fb 100%);
+        color: #fff;
+        padding: 1rem 1.25rem;
+        text-align: center;
+    }
+
+    .manage-title {
+        color: #fff;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin: 0;
+        font-size: 1.375rem;
+    }
+
+    .manage-subtitle {
+        color: rgba(255,255,255,0.95);
+        font-weight: 500;
+        margin: 0;
+        font-size: 0.95rem;
+        opacity: 0.95;
+    }
+
+    .manage-panel {
+        background: #fff;
+        border: 0;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        min-height: 200px;
+        box-shadow: 0 6px 18px rgba(8,20,50,0.06);
+    }
+
+    .manage-content {
+        background: #fff;
+        border: 0;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        min-height: 300px;
+        box-shadow: 0 6px 18px rgba(8,20,50,0.06);
+    }
+
+    hr.manage-divider {
+        border-top: 2px solid rgba(227,234,252,1);
+        margin: 1rem 0 1.25rem;
+    }
+    
+</style>
+
+<div class="manage-wrapper d-flex align-items-start justify-content-center">
+    <div class="card manage-card shadow-lg">
+        <div class="manage-hero">
+            <h2 class="manage-title">Manage your account</h2>
+            <p class="manage-subtitle mb-0">Change your account settings</p>
+        </div>
+
+        <div class="card-body">
+            <hr class="manage-divider" />
             <div class="row g-4">
                 <div class="col-md-3">
-                    <div class="bg-white border-0 rounded-4 p-3 h-100 shadow-sm" style="min-height: 200px;">
+                    <div class="manage-panel">
                         <partial name="_ManageNav" />
                     </div>
                 </div>
+
                 <div class="col-md-9">
-                    <div class="bg-white border-0 rounded-4 p-4 h-100 shadow-sm" style="min-height: 300px;">
+                    <div class="manage-content">
                         @RenderBody()
                     </div>
                 </div>
