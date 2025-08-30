@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using CineTrackPortal.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineTrackPortal.Controllers
@@ -15,10 +16,17 @@ namespace CineTrackPortal.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                // Render IndexLoggedIn.cshtml for authenticated users
+                return View("IndexLoggedIn");
+            }
+            // Render Index.cshtml for unauthenticated users
+            return View("Index");
         }
 
-        public IActionResult Privacy()
+        [Route("About")]
+        public IActionResult About()
         {
             return View();
         }
