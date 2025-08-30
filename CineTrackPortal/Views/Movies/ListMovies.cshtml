@@ -1,0 +1,241 @@
+﻿@model IEnumerable<CineTrackPortal.Models.MovieModel>
+
+@{
+    ViewData["Title"] = "All Movies";
+}
+
+<div class="container my-4">
+    <div class="card shadow-lg border-0 rounded-5 bg-white dashboard-main-card">
+        <div class="card-body px-3 py-4">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold mb-2 text-gradient dashboard-title">
+                    <i class="bi bi-collection-play me-2"></i>
+                    All Movies
+                </h2>
+                <p class="lead mb-0 text-secondary dashboard-subtitle">
+                    Browse the full movie list below.
+                </p>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Actors</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var movie in Model)
+                        {
+                            <tr class="selectable-row" tabindex="0" data-movie-id="@movie.MovieId">
+                                <td>@movie.Title</td>
+                                <td>@movie.Date.ToShortDateString()</td>
+                                <td>
+                                    @if (movie.Actors != null && movie.Actors.Any())
+                                    {
+                                        @string.Join(", ", movie.Actors.Select(a => a.FirstName + " " + a.LastName))
+                                    }
+                                    else
+                                    {
+                                        <span class="text-secondary">No actors</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <a asp-action="Details" asp-route-id="@movie.MovieId" class="btn btn-sm btn-outline-info rounded-pill dashboard-action-btn me-1" title="Details" data-bs-toggle="tooltip">
+                                        <i class="bi bi-info-circle"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@movie.MovieId" class="btn btn-sm btn-outline-warning rounded-pill dashboard-action-btn me-1" title="Edit" data-bs-toggle="tooltip">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@movie.MovieId" class="btn btn-sm btn-outline-danger rounded-pill dashboard-action-btn" title="Delete" data-bs-toggle="tooltip">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-main-card {
+    }
+
+    .dashboard-title {
+    }
+
+    .dashboard-subtitle {
+    }
+
+    .text-gradient {
+        background: linear-gradient(90deg, #258cfb 60%, #6a82fb 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .dashboard-action-btn {
+        box-shadow: 0 2px 8px rgba(37,140,251,0.08);
+        transition: transform 0.12s, box-shadow 0.12s, background 0.12s, border-color 0.12s;
+        padding: 0.35rem 0.75rem;
+        font-size: 1.1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8fafd;
+        border-width: 2px;
+    }
+
+    .btn-outline-info.dashboard-action-btn {
+        border-color: #b6e0fe;
+        color: #258cfb;
+        background-color: #f0f8ff;
+    }
+
+        .btn-outline-info.dashboard-action-btn:hover, .btn-outline-info.dashboard-action-btn:focus {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            border-color: #90caf9;
+        }
+
+    .btn-outline-warning.dashboard-action-btn {
+        border-color: #ffe6a1;
+        color: #ffb300;
+        background-color: #fffbe6;
+    }
+
+        .btn-outline-warning.dashboard-action-btn:hover, .btn-outline-warning.dashboard-action-btn:focus {
+            background-color: #fff3cd;
+            color: #b28704;
+            border-color: #ffe082;
+        }
+
+    .btn-outline-danger.dashboard-action-btn {
+        border-color: #ffbdbd;
+        color: #e53935;
+        background-color: #fff5f5;
+    }
+
+        .btn-outline-danger.dashboard-action-btn:hover, .btn-outline-danger.dashboard-action-btn:focus {
+            background-color: #ffeaea;
+            color: #b71c1c;
+            border-color: #ff8a80;
+        }
+
+    .dashboard-action-btn:hover, .dashboard-action-btn:focus {
+        transform: translateY(-2px) scale(1.08);
+        box-shadow: 0 4px 16px rgba(37,140,251,0.15);
+        opacity: 0.96;
+        text-decoration: none;
+    }
+
+    /* Enhanced table and row styles */
+    .table {
+        border-collapse: separate;
+        border-spacing: 0 0.25rem;
+        background: transparent;
+    }
+
+        .table thead th {
+            background: #f4f8fb;
+            border: none;
+            color: #258cfb;
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: 0.02em;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+    .table-striped > tbody > tr.selectable-row:nth-of-type(odd) {
+        background-color: #f8fafd;
+    }
+
+    .table-striped > tbody > tr.selectable-row:nth-of-type(even) {
+        background-color: #f4f8fb;
+    }
+
+    .selectable-row {
+        cursor: pointer;
+        transition: background 0.22s cubic-bezier(.4,0,.2,1), box-shadow 0.22s cubic-bezier(.4,0,.2,1), border-left 0.22s cubic-bezier(.4,0,.2,1), transform 0.22s cubic-bezier(.4,0,.2,1);
+        outline: none;
+        border-radius: 0.5rem;
+        border-left: 4px solid transparent;
+        will-change: background, box-shadow, border-left, transform;
+    }
+
+        .selectable-row:hover:not(.selected):not(:active):not(:focus) {
+            background: #e3f2fd !important;
+            box-shadow: 0 4px 18px 0 #258cfb22;
+            border-left: 4px solid #90caf9;
+            transform: scale(1.012) translateY(-2px);
+            z-index: 1;
+            position: relative;
+        }
+
+        .selectable-row:focus {
+            background: #e3f2fd !important;
+            box-shadow: 0 0 0 2px #258cfb33, 0 4px 18px 0 #258cfb22;
+            border-left: 4px solid #258cfb;
+            transform: scale(1.012) translateY(-2px);
+            z-index: 2;
+            position: relative;
+        }
+
+        .selectable-row.selected, .selectable-row:active {
+            background: #cbeafe !important;
+            box-shadow: 0 6px 24px 0 #258cfb33;
+            border-left: 6px solid #258cfb;
+            transform: scale(1.018) translateY(-3px);
+            z-index: 3;
+            position: relative;
+        }
+
+    .table td, .table th {
+        vertical-align: middle;
+        border-top: none;
+        border-bottom: none;
+        padding: 0.85rem 1rem;
+        background: transparent;
+    }
+
+    .table-responsive {
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 2px 16px 0 #258cfb11;
+    }
+</style>
+
+<script>
+    // Enable Bootstrap tooltips for action buttons
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Row selection logic
+        document.querySelectorAll('.selectable-row').forEach(function(row) {
+            row.addEventListener('click', function() {
+                document.querySelectorAll('.selectable-row.selected').forEach(function(r) {
+                    r.classList.remove('selected');
+                });
+                row.classList.add('selected');
+            });
+            row.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    document.querySelectorAll('.selectable-row.selected').forEach(function(r) {
+                        r.classList.remove('selected');
+                    });
+                    row.classList.add('selected');
+                }
+            });
+        });
+    });
+</script>
