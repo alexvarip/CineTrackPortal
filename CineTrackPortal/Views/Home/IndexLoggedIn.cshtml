@@ -56,9 +56,11 @@
                 <div class="alert alert-success rounded-4 mb-2 dashboard-tip">
                     <strong>Tip:</strong> Use the navigation menu to access all features. You are fully authenticated.
                 </div>
-                <a href="/Identity/Account/Logout" class="btn btn-outline-danger btn-md rounded-pill mx-2 px-3 mb-2 dashboard-signout">
-                    <i class="bi bi-box-arrow-right me-1"></i>Sign Out
-                </a>
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-danger btn-md rounded-pill mx-2 px-3 mb-2 dashboard-signout">
+                        <i class="bi bi-box-arrow-right me-1"></i>Sign Out
+                    </button>
+                </form>
                 <div>
                     <small class="text-secondary dashboard-powered">
                         Powered by <b>ASP.NET Core</b> (.NET 9, C# 13)
@@ -190,5 +192,4 @@
         font-size: 0.92rem;
         color: #adb5bd;
     }
-
-   </style>
+</style>
