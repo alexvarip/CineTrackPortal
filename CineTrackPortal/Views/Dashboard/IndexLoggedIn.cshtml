@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container my-4">
+    <div class="card shadow-lg border-0 rounded-5 bg-white dashboard-main-card">
+        <div class="card-body px-3 py-4">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold mb-2 text-gradient dashboard-title">
+                    <i class="bi bi-film me-2"></i>
+                    CineTrack Portal Dashboard
+                </h2>
+                <p class="lead mb-0 text-secondary dashboard-subtitle">
+                    Welcome! You are signed in. Access all features below.
+                </p>
+            </div>
+            <div class="dashboard-grid mb-4">
+                <a href="/Movies" class="dashboard-link">
+                    <div class="dashboard-feature rounded-4 shadow-sm p-3 text-center bg-white border border-1 border-success-subtle">
+                        <div class="icon-circle bg-success bg-opacity-10 mb-2 mx-auto">
+                            <i class="bi bi-camera-reels-fill fs-4 text-success"></i>
+                        </div>
+                        <div class="fw-semibold fs-6 mb-1">Movies</div>
+                        <div class="text-secondary small mb-1">Browse and manage movie records.</div>
+                    </div>
+                </a>
+                <a href="/Actors" class="dashboard-link">
+                    <div class="dashboard-feature rounded-4 shadow-sm p-3 text-center bg-white border border-1 border-info-subtle">
+                        <div class="icon-circle bg-info bg-opacity-10 mb-2 mx-auto">
+                            <i class="bi bi-person-video fs-4 text-info"></i>
+                        </div>
+                        <div class="fw-semibold fs-6 mb-1">Actors</div>
+                        <div class="text-secondary small mb-1">View and edit actor information.</div>
+                    </div>
+                </a>
+                <a href="/UserManagement" class="dashboard-link">
+                    <div class="dashboard-feature rounded-4 shadow-sm p-3 text-center bg-white border border-1 border-primary-subtle">
+                        <div class="icon-circle bg-primary bg-opacity-10 mb-2 mx-auto">
+                            <i class="bi bi-person-badge-fill fs-4 text-primary"></i>
+                        </div>
+                        <div class="fw-semibold fs-6 mb-1">System Users</div>
+                        <div class="text-secondary small mb-1">Manage user accounts and permissions.</div>
+                    </div>
+                </a>
+                <a href="/Reports" class="dashboard-link">
+                    <div class="dashboard-feature rounded-4 shadow-sm p-3 text-center bg-white border border-1 border-warning-subtle">
+                        <div class="icon-circle bg-warning bg-opacity-10 mb-2 mx-auto">
+                            <i class="bi bi-bar-chart-fill fs-4 text-warning"></i>
+                        </div>
+                        <div class="fw-semibold fs-6 mb-1">Reports</div>
+                        <div class="text-secondary small mb-1">View analytics and generate reports.</div>
+                    </div>
+                </a>
+            </div>
+            <div class="text-center">
+                <div class="alert alert-success rounded-4 mb-2 dashboard-tip">
+                    <strong>Tip:</strong> Use the navigation menu to access all features. You are fully authenticated.
+                </div>
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-danger btn-md rounded-pill mx-2 px-3 mb-2 dashboard-signout">
+                        <i class="bi bi-box-arrow-right me-1"></i>Sign Out
+                    </button>
+                </form>
+                <div>
+                    <small class="text-secondary dashboard-powered">
+                        Powered by <b>ASP.NET Core</b> (.NET 9, C# 13)
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(120deg, #f8fafc 0%, #e3e9f7 100%);
+    }   
+</style>
