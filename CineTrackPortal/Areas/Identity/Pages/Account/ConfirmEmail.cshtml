@@ -1,0 +1,29 @@
+﻿@page
+@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirm email";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg rounded-4 border-0">
+                <div class="card-body p-5 text-center">
+                    <h1 class="mb-4 fw-bold" style="letter-spacing:0.5px;">@ViewData["Title"]</h1>
+                    <partial name="_StatusMessage" model="Model.StatusMessage" />
+                    <div class="mt-4 text-secondary small">
+                        You will be redirected to the home page shortly...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        setTimeout(function () {
+            window.location.href = '/';
+        }, 4000); // Redirect after 4 seconds
+    </script>
+}
