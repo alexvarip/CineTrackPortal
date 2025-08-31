@@ -87,8 +87,9 @@ namespace CineTrackPortal.Controllers
         // POST: MoviesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MovieModel movie, Guid[] selectedActors)
+        public async Task<IActionResult> Create(MovieModel movie, Guid[] selectedActors, List<ActorModel> NewActors)
         {
+            // Add selected existing actors
             if (selectedActors != null)
             {
                 movie.Actors = new List<ActorModel>();
@@ -98,6 +99,25 @@ namespace CineTrackPortal.Controllers
                     if (actor != null)
                     {
                         movie.Actors.Add(actor);
+                    }
+                }
+            }
+            else
+            {
+                movie.Actors = new List<ActorModel>();
+            }
+
+            // Add new actors from the form
+            if (NewActors != null)
+            {
+                foreach (var newActor in NewActors)
+                {
+                    // Only add if both names are provided
+                    if (!string.IsNullOrWhiteSpace(newActor.FirstName) && !string.IsNullOrWhiteSpace(newActor.LastName))
+                    {
+                        newActor.ActorId = Guid.NewGuid();
+                        _context.Actors.Add(newActor);
+                        movie.Actors.Add(newActor);
                     }
                 }
             }
