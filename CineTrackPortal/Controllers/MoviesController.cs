@@ -26,6 +26,7 @@ namespace CineTrackPortal.Controllers
             return View();
         }
 
+
         // GET: MoviesController/List
         public async Task<IActionResult> ListMovies(int pageIndex = 1)
         {
@@ -38,6 +39,7 @@ namespace CineTrackPortal.Controllers
 
             return View(movies);
         }
+
 
         // GET: MoviesController/Details/{Guid}
         public async Task<IActionResult> Details(Guid id)
@@ -72,11 +74,13 @@ namespace CineTrackPortal.Controllers
             return View(movie);
         }
 
+
         // GET: MoviesController/Create
         public IActionResult Create()
         {
             return View();
         }
+
 
         // POST: MoviesController/Create
         [HttpPost]
@@ -93,7 +97,8 @@ namespace CineTrackPortal.Controllers
             return View(movie);
         }
 
-        // GET: MoviesController/Edit/5
+
+        // GET: MoviesController/Edit/{Guid}
         public async Task<IActionResult> Edit(Guid id)
         {
             var movie = await _context.Movies.FindAsync(id);
@@ -102,22 +107,43 @@ namespace CineTrackPortal.Controllers
             return View(movie);
         }
 
-        // POST: MoviesController/Edit/5
+
+        // POST: MoviesController/Edit/{Guid}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, MovieModel movie)
+        public async Task<IActionResult> Edit(Guid id, [Bind("MovieId, Title, Date")] MovieModel movie)
         {
             if (id != movie.MovieId)
                 return BadRequest();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(movie);
+
+            // Only update Title and Date, not navigation properties
+            var movieToUpdate = await _context.Movies.FindAsync(id);
+            if (movieToUpdate == null)
+                return NotFound();
+
+            movieToUpdate.Title = movie.Title;
+            movieToUpdate.Date = movie.Date;
+
+            try
             {
-                _context.Entry(movie).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewBag.EditSuccess = true;
+                return View(movieToUpdate); // Return the view with the updated model and success flag
+
+                //TempData["EditSuccess"] = "Movie updated successfully!";
+                //return RedirectToAction(actionName: nameof(Details), new { id = movie.MovieId });
             }
-            return View(movie);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Movies.Any(e => e.MovieId == id))
+                    return NotFound();
+                throw;
+            }
         }
+
 
         // GET: MoviesController/Delete/5
         public async Task<IActionResult> Delete(Guid id)
@@ -127,6 +153,7 @@ namespace CineTrackPortal.Controllers
                 return NotFound();
             return View(movie);
         }
+
 
         // POST: MoviesController/Delete/5
         [HttpPost, ActionName("Delete")]
