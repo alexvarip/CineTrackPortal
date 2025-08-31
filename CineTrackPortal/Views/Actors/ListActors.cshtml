@@ -1,0 +1,299 @@
+﻿@model CineTrackPortal.Models.PaginatedList<CineTrackPortal.Models.ActorModel>
+
+@{
+    ViewData["Title"] = "All Actors";
+    var backUrl = Url.Action("Index", "Actors");
+}
+
+<div class="container my-4">
+    <div class="card shadow-lg border-0 rounded-5 bg-white dashboard-main-card">
+        <div class="card-body px-3 py-4">
+            <div class="d-flex align-items-center justify-content-center mb-4 text-center" style="position: relative;">
+                <a href="@backUrl" class="btn rounded-pill dashboard-action-arrow-btn me-3" style="position: absolute; left: 0; margin-left:22px;">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <div class="flex-grow-1">
+                    <h2 class="fw-bold mb-2 text-gradient dashboard-title">
+                        <i class="bi bi-collection-play me-2"></i>
+                        All Actors
+                    </h2>
+                    <p class="lead mb-0 text-secondary dashboard-subtitle">
+                        Browse the full actor list below.
+                    </p>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>First Name </th>
+                            <th>Last Name</th>
+                            <th>Movies</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var actor in Model)
+                        {
+                            <tr class="selectable-row" tabindex="0" data-actor-id="@actor.ActorId" onclick="window.location.href='@Url.Action("Details", "Actors", new { id = actor.ActorId })'">
+                                <td>@actor.FirstName</td>
+                                <td>@actor.LastName</td>
+                                <td>
+                                    @if (actor.Movies != null && actor.Movies.Any())
+                                    {
+                                        var movieNames = actor.Movies.Select(a => a.Title).ToList();
+                                        var firstTwo = movieNames.Take(2).ToList();
+                                        var remainingCount = movieNames.Count - 2;
+                                        var tooltip = string.Join(", ", movieNames);
+
+                                        <span class="movie-tooltip" data-bs-toggle="tooltip" data-bs-placement="auto" title="@tooltip">
+                                            @string.Join(", ", firstTwo)
+                                            @if (remainingCount > 0)
+                                            {
+                                                <span class="text-primary fw-semibold">+@remainingCount more</span>
+                                            }
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-secondary">No actors</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <a asp-action="Details" asp-route-id="@actor.ActorId" class="btn btn-sm btn-outline-info rounded-pill dashboard-action-btn me-1" title="Details" data-bs-toggle="tooltip" data-bs-placement="auto">
+                                        <i class="bi bi-info-circle"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@actor.ActorId" class="btn btn-sm btn-outline-warning rounded-pill dashboard-action-btn me-1" title="Edit" data-bs-toggle="tooltip" data-bs-placement="auto">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@actor.ActorId" class="btn btn-sm btn-outline-danger rounded-pill dashboard-action-btn" title="Delete" data-bs-toggle="tooltip" data-bs-placement="auto">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Controls -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-4">
+                    <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                        <a class="page-link" asp-action="ListActors" asp-route-pageIndex="@(Model.PageIndex - 1)">Previous</a>
+                    </li>
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                            <a class="page-link" asp-action="ListActors" asp-route-pageIndex="@i">@i</a>
+                        </li>
+                    }
+                    <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                        <a class="page-link" asp-action="ListActors" asp-route-pageIndex="@(Model.PageIndex + 1)">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Keep your existing styles and scripts -->
+
+<style>
+    .dashboard-main-card {
+    }
+
+    .dashboard-title {
+    }
+
+    .dashboard-subtitle {
+    }
+
+    .text-gradient {
+        background: linear-gradient(90deg, #258cfb 60%, #6a82fb 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .btn-outline-info.dashboard-action-btn {
+        border-color: #b6e0fe;
+        color: #258cfb;
+        background-color: #f0f8ff;
+    }
+
+        .btn-outline-info.dashboard-action-btn:hover, .btn-outline-info.dashboard-action-btn:focus {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            border-color: #90caf9;
+        }
+
+    .btn-outline-warning.dashboard-action-btn {
+        border-color: #ffe6a1;
+        color: #ffb300;
+        background-color: #fffbe6;
+    }
+
+        .btn-outline-warning.dashboard-action-btn:hover, .btn-outline-warning.dashboard-action-btn:focus {
+            background-color: #fff3cd;
+            color: #b28704;
+            border-color: #ffe082;
+        }
+
+    .btn-outline-danger.dashboard-action-btn {
+        border-color: #ffbdbd;
+        color: #e53935;
+        background-color: #fff5f5;
+    }
+
+        .btn-outline-danger.dashboard-action-btn:hover, .btn-outline-danger.dashboard-action-btn:focus {
+            background-color: #ffeaea;
+            color: #b71c1c;
+            border-color: #ff8a80;
+        }
+
+
+    .dashboard-action-btn {
+        box-shadow: 0 2px 8px rgba(37,140,251,0.08);
+        transition: transform 0.12s, box-shadow 0.12s, background 0.12s, border-color 0.12s;
+        padding: 0.35rem 0.75rem;
+        font-size: 1.1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8fafd;
+        border-width: 2px;
+    }
+
+
+    /* Enhanced table and row styles */
+    .table {
+        border-collapse: separate;
+        border-spacing: 0 0.25rem;
+        background: transparent;
+    }
+
+        .table thead th {
+            background: #f4f8fb;
+            border: none;
+            color: #258cfb;
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: 0.02em;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+    .table-striped > tbody > tr.selectable-row:nth-of-type(odd) {
+        background-color: #f8fafd;
+    }
+
+    .table-striped > tbody > tr.selectable-row:nth-of-type(even) {
+        background-color: #f4f8fb;
+    }
+
+    .selectable-row {
+        cursor: pointer;
+        transition: background 0.04s cubic-bezier(.4,0,.2,1), box-shadow 0.04s cubic-bezier(.4,0,.2,1), border-left 0.04s cubic-bezier(.4,0,.2,1), transform 0.04s cubic-bezier(.4,0,.2,1);
+        outline: none;
+        border-radius: 0.5rem;
+        border-left: 4px solid transparent;
+        will-change: background, box-shadow, border-left, transform;
+    }
+
+        .selectable-row:hover:not(.selected):not(:active):not(:focus) {
+            background: #e3f2fd !important;
+            box-shadow: 0 4px 18px 0 #258cfb22;
+            border-left: 4px solid #90caf9;
+            transform: scale(1.012) translateY(-2px);
+            z-index: 1;
+            position: relative;
+        }
+
+        .selectable-row:focus {
+            background: #e3f2fd !important;
+            box-shadow: 0 0 0 2px #258cfb33, 0 4px 18px 0 #258cfb22;
+            border-left: 4px solid #258cfb;
+            transform: scale(1.012) translateY(-2px);
+            z-index: 2;
+            position: relative;
+        }
+
+        .selectable-row.selected, .selectable-row:active {
+            background: #cbeafe !important;
+            box-shadow: 0 6px 24px 0 #258cfb33;
+            border-left: 6px solid #258cfb;
+            transform: scale(1.018) translateY(-3px);
+            z-index: 3;
+            position: relative;
+        }
+
+    .table td, .table th {
+        vertical-align: middle;
+        border-top: none;
+        border-bottom: none;
+        padding: 0.85rem 1rem;
+        background: transparent;
+    }
+
+    .table-responsive {
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 2px 16px 0 #258cfb11;
+    }
+
+    .movie-tooltip {
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    /* Custom tooltip background, text color, border, and font */
+    .tooltip .tooltip-inner {
+        background-color: #258cfb; /* Your brand color */
+        color: #fff; /* Text color */
+        font-size: 1rem; /* Font size */
+        font-family: 'Segoe UI', Arial, sans-serif; /* Font family */
+        border-radius: 0.5rem; /* Rounded corners */
+        border: 2px solid #1565c0; /* Optional border */
+        padding: 0.6rem 1rem;
+        box-shadow: 0 4px 16px rgba(37,140,251,0.15);
+    }
+
+    /* Custom arrow color to match tooltip background */
+    .tooltip .tooltip-arrow::before {
+        border-top-color: #258cfb !important; /* For top placement */
+        border-bottom-color: #258cfb !important; /* For bottom placement */
+        border-left-color: #258cfb !important; /* For left placement */
+        border-right-color: #258cfb !important; /* For right placement */
+    }
+</style>
+
+<script>
+    // Enable Bootstrap tooltips for action buttons
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+
+        // Row selection logic
+        document.querySelectorAll('.selectable-row').forEach(function(row) {
+            row.addEventListener('click', function() {
+                document.querySelectorAll('.selectable-row.selected').forEach(function(r) {
+                    r.classList.remove('selected');
+                });
+                row.classList.add('selected');
+            });
+            row.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    document.querySelectorAll('.selectable-row.selected').forEach(function(r) {
+                        r.classList.remove('selected');
+                    });
+                    row.classList.add('selected');
+                }
+            });
+        });
+    });
+</script>

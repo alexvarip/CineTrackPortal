@@ -1,0 +1,142 @@
+﻿@model CineTrackPortal.Models.ActorModel
+
+@{
+    ViewData["Title"] = "Actor Details";
+    var returnUrl = Context.Request.Query["returnUrl"].FirstOrDefault();
+    var isLocal = !string.IsNullOrEmpty(returnUrl) && returnUrl.StartsWith("/");
+    var backUrl = isLocal ? returnUrl : Url.Action("ListActors", "Actors");
+}
+
+<div class="container my-4">
+    <div class="card shadow-lg border-0 rounded-5 bg-white dashboard-main-card">
+        <div class="card-body px-4 py-4">
+            <div class="d-flex align-items-center justify-content-center mb-4 text-center" style="position: relative;">
+                <a href="@backUrl" class="btn rounded-pill dashboard-action-arrow-btn me-3" style="position: absolute; left: 0; margin-left:22px;">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <div class="flex-grow-1">
+                    <h2 class="fw-bold mb-2 text-gradient dashboard-title">
+                        <i class="bi bi-info-circle me-2"></i>
+                        @Model.FirstName @Model.LastName
+                    </h2>
+                    <p class="lead mb-0 text-secondary dashboard-subtitle">
+                        Details for this actor entry.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <!-- Main Actor Info -->
+                <div class="col-12 col-lg-4">
+                    <div class="info-block p-3 rounded-4 h-100 bg-light border mx-auto" style="max-width: 340px;">
+                        <h5 class="text-gradient mb-3">Actor Info</h5>
+                        <div class="mb-2"><span class="fw-semibold text-secondary">First Name:</span> @Model.FirstName</div>
+                        <div class="mb-2"><span class="fw-semibold text-secondary">Last Name:</span> @Model.LastName</div>
+                        <div class="mb-2"><span class="fw-semibold text-secondary">Actor ID:</span> <code>@Model.ActorId</code></div>
+                        <div class="mb-2">
+                            <span class="fw-semibold text-secondary">Movies:</span>
+                            @if (Model.Movies != null && Model.Movies.Any())
+                            {
+                                <span>
+                                    @foreach (var movie in Model.Movies)
+                                    {
+                                        <a asp-controller="Movies"
+                                           asp-action="Details"
+                                           asp-route-id="@movie.MovieId"
+                                           asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)"
+                                           class="badge bg-light text-primary border border-primary me-1 mb-1"
+                                           style="text-decoration:none;">
+                                            @movie.Title
+                                        </a>
+                                    }
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-secondary">No movies</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-main-card {
+        /* Inherit your dashboard card style */
+    }
+
+    .dashboard-title {
+        /* Inherit your dashboard title style */
+    }
+
+    .dashboard-subtitle {
+        /* Inherit your dashboard subtitle style */
+    }
+
+    .text-gradient {
+        background: linear-gradient(90deg, #258cfb 60%, #6a82fb 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* .dashboard-action-btn {
+        background-color: transparent;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none;
+        color: #258cfb;
+        font-size: 1.1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.35rem 0.75rem;
+        transition: transform 0.12s, box-shadow 0.12s, background 0.12s, border-color 0.12s;
+    }
+
+        .dashboard-action-btn:focus,
+        .dashboard-action-btn:active,
+        .dashboard-action-btn:hover {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none;
+            background-color: rgba(37,140,251,0.08);
+            color: #1565c0;
+            transform: translateY(-2px) scale(1.08);
+            text-decoration: none;
+            opacity: 0.96;
+        }
+
+        .dashboard-action-btn i {
+            color: #258cfb;
+            font-size: 1.55rem;
+            line-height: 1;
+            vertical-align: middle;
+        } */
+
+    .badge.bg-info {
+        background: linear-gradient(90deg, #b6e0fe 60%, #258cfb 100%);
+        color: #1565c0;
+        font-weight: 600;
+    }
+
+    .badge.bg-light.text-primary {
+        background: #f0f8ff;
+        color: #258cfb;
+        font-weight: 500;
+    }
+
+    .badge.bg-light.text-success {
+        background: #e6f9f0;
+        color: #2e7d32;
+        font-weight: 500;
+    }
+
+    .info-block {
+        min-height: 350px;
+        box-shadow: 0 2px 8px rgba(37,140,251,0.04);
+    }
+</style>

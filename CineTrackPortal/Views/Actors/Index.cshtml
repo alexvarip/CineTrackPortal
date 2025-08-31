@@ -1,0 +1,114 @@
+﻿@{
+    ViewData["Title"] = "Actors Menu";
+    var backUrl = Url.Action("Index", "");
+}
+
+<div class="container my-4">
+    <div class="card shadow-lg border-0 rounded-5 bg-white dashboard-main-card">
+        <div class="card-body px-3 py-4">
+            <div class="d-flex align-items-center justify-content-center mb-4 text-center" style="position: relative;">
+                <a href="@backUrl" class="btn rounded-pill dashboard-action-arrow-btn me-3" style="position: absolute; left: 0; margin-left:22px;">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <div class="flex-grow-1">
+                    <h2 class="fw-bold mb-2 text-gradient dashboard-title">
+                        <i class="bi bi-film me-2"></i>
+                        Actors - Select Operation
+                    </h2>
+                    <p class="lead mb-0 text-secondary dashboard-subtitle">
+                        Choose an actor operation below.
+                    </p>
+                </div>
+            </div>
+            <div class="dashboard-grid mb-4">
+                <a href="@Url.Action("ListActors", "Actors")" class="dashboard-link">
+                    <div class="dashboard-feature rounded-4 shadow-sm p-3 text-center bg-white border border-1 border-primary-subtle">
+                        <div class="icon-circle bg-primary bg-opacity-10 mb-2 mx-auto">
+                            <i class="bi bi-collection-play fs-4 text-primary"></i>
+                        </div>
+                        <div class="fw-semibold fs-6 mb-1">View All Actors</div>
+                        <div class="text-secondary small mb-1">Browse the full actor list.</div>
+                    </div>
+                </a>
+                <a href="@Url.Action("Create", "Actors")" class="dashboard-link">
+                    <div class="dashboard-feature rounded-4 shadow-sm p-3 text-center bg-white border border-1 border-success-subtle">
+                        <div class="icon-circle bg-success bg-opacity-10 mb-2 mx-auto">
+                            <i class="bi bi-plus-circle fs-4 text-success"></i>
+                        </div>
+                        <div class="fw-semibold fs-6 mb-1">Add New Actors</div>
+                        <div class="text-secondary small mb-1">Insert a new actor record.</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .dashboard-feature {
+        transition: transform 0.12s, box-shadow 0.12s;
+        cursor: pointer;
+    }
+
+        .dashboard-feature:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 0.5rem 1.5rem rgba(37,140,251,0.10);
+            z-index: 2;
+        }
+
+    .icon-circle {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .text-gradient {
+        background: linear-gradient(90deg, #258cfb 60%, #6a82fb 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* .dashboard-action-btn {
+        background-color: transparent;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none;
+        color: #258cfb;
+        font-size: 1.1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.35rem 0.75rem;
+        transition: transform 0.12s, box-shadow 0.12s, background 0.12s, border-color 0.12s;
+    }
+
+        .dashboard-action-btn:focus,
+        .dashboard-action-btn:active,
+        .dashboard-action-btn:hover {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none;
+            background-color: rgba(37,140,251,0.08);
+            color: #1565c0;
+            transform: translateY(-2px) scale(1.08);
+            text-decoration: none;
+            opacity: 0.96;
+        }
+
+        .dashboard-action-btn i {
+            color: #258cfb;
+            font-size: 1.55rem;
+            line-height: 1;
+            vertical-align: middle;
+        } */
+</style>
