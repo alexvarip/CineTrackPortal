@@ -2,19 +2,25 @@
 
 @{
     ViewData["Title"] = "All Movies";
+    var backUrl = Url.Action("Index", "Movies");
 }
 
 <div class="container my-4">
     <div class="card shadow-lg border-0 rounded-5 bg-white dashboard-main-card">
         <div class="card-body px-3 py-4">
-            <div class="text-center mb-4">
-                <h2 class="fw-bold mb-2 text-gradient dashboard-title">
-                    <i class="bi bi-collection-play me-2"></i>
-                    All Movies
-                </h2>
-                <p class="lead mb-0 text-secondary dashboard-subtitle">
-                    Browse the full movie list below.
-                </p>
+            <div class="d-flex align-items-center justify-content-center mb-4 text-center" style="position: relative;">
+                <a href="@backUrl" class="btn rounded-pill dashboard-action-arrow-btn me-3" style="position: absolute; left: 0; margin-left:22px;">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <div class="flex-grow-1">
+                    <h2 class="fw-bold mb-2 text-gradient dashboard-title">
+                        <i class="bi bi-collection-play me-2"></i>
+                        All Movies
+                    </h2>
+                    <p class="lead mb-0 text-secondary dashboard-subtitle">
+                        Browse the full movie list below.
+                    </p>
+                </div>
             </div>
             <div class="table-responsive">
                 <table class="table table-striped align-middle mb-0">
@@ -158,13 +164,7 @@
             border-color: #ff8a80;
         }
 
-    .dashboard-action-btn:hover, .dashboard-action-btn:focus {
-        transform: translateY(-2px) scale(1.08);
-        box-shadow: 0 4px 16px rgba(37,140,251,0.15);
-        opacity: 0.96;
-        text-decoration: none;
-    }
-
+ 
     /* Enhanced table and row styles */
     .table {
         border-collapse: separate;

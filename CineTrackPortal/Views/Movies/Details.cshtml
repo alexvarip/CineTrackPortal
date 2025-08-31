@@ -3,14 +3,17 @@
 @{
     ViewData["Title"] = "Movie Details";
     dynamic csv = ViewBag.CsvRow;
+    var returnUrl = Context.Request.Query["returnUrl"].FirstOrDefault();
+    var isLocal = !string.IsNullOrEmpty(returnUrl) && returnUrl.StartsWith("/");
+    var backUrl = isLocal ? returnUrl : Url.Action("ListMovies", "Movies");
 }
 
 <div class="container my-4">
     <div class="card shadow-lg border-0 rounded-5 bg-white dashboard-main-card">
         <div class="card-body px-4 py-4">
             <div class="d-flex align-items-center justify-content-center mb-4 text-center" style="position: relative;">
-                <a asp-action="ListMovies" class="btn rounded-pill dashboard-action-btn me-3" style="position: absolute; left: 0; margin-left:22px;">
-                    <i class="bi bi-arrow-left"></i> 
+                <a href="@backUrl" class="btn rounded-pill dashboard-action-arrow-btn me-3" style="position: absolute; left: 0; margin-left:22px;">
+                    <i class="bi bi-arrow-left"></i>
                 </a>
                 <div class="flex-grow-1">
                     <h2 class="fw-bold mb-2 text-gradient dashboard-title">
@@ -38,7 +41,14 @@
                                 <span>
                                     @foreach (var actor in Model.Actors)
                                     {
-                                        <span class="badge bg-light text-primary border border-primary me-1 mb-1">@actor.FirstName @actor.LastName</span>
+                                        <a asp-controller="Actors"
+                                           asp-action="Details"
+                                           asp-route-id="@actor.ActorId"
+                                           asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)"
+                                           class="badge bg-light text-primary border border-primary me-1 mb-1"
+                                           style="text-decoration:none;">
+                                            @actor.FirstName @actor.LastName
+                                        </a>
                                     }
                                 </span>
                             }
@@ -118,7 +128,7 @@
         background-clip: text;
     }
 
-    .dashboard-action-btn {
+/*     .dashboard-action-btn {
         background-color: transparent;
         border: none !important;
         outline: none !important;
@@ -150,7 +160,7 @@
             font-size: 1.55rem;
             line-height: 1;
             vertical-align: middle;
-        }
+        } */
 
     .badge.bg-info {
         background: linear-gradient(90deg, #b6e0fe 60%, #258cfb 100%);

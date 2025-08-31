@@ -1,18 +1,24 @@
 ﻿@{
     ViewData["Title"] = "Movies Menu";
+    var backUrl = Url.Action("Index", "");
 }
 
 <div class="container my-4">
     <div class="card shadow-lg border-0 rounded-5 bg-white dashboard-main-card">
         <div class="card-body px-3 py-4">
-            <div class="text-center mb-4">
-                <h2 class="fw-bold mb-2 text-gradient dashboard-title">
-                    <i class="bi bi-film me-2"></i>
-                    Movies - Select Operation
-                </h2>
-                <p class="lead mb-0 text-secondary dashboard-subtitle">
-                    Choose a movie operation below.
-                </p>
+               <div class="d-flex align-items-center justify-content-center mb-4 text-center" style="position: relative;">
+                <a href="@backUrl" class="btn rounded-pill dashboard-action-arrow-btn me-3" style="position: absolute; left: 0; margin-left:22px;">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <div class="flex-grow-1">
+                    <h2 class="fw-bold mb-2 text-gradient dashboard-title">
+                        <i class="bi bi-film me-2"></i>
+                        Movies - Select Operation
+                    </h2>
+                    <p class="lead mb-0 text-secondary dashboard-subtitle">
+                        Choose a movie operation below.
+                    </p>
+                </div>
             </div>
             <div class="dashboard-grid mb-4">
                 <a href="@Url.Action("ListMovies", "Movies")" class="dashboard-link">
