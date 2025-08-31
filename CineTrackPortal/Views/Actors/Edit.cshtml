@@ -1,0 +1,52 @@
+﻿@model CineTrackPortal.Models.ActorModel
+
+@{
+    ViewData["Title"] = "Edit Actor";
+}
+
+@if (ViewBag.EditSuccess != null && ViewBag.EditSuccess)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="editSuccessAlert">
+        Actor information updated successfully! Redirecting to actor list...
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <script>
+        setTimeout(function () {
+            window.location.href = '@Url.Action("ListActors", "Actors")';
+        }, 2000);
+    </script>
+}
+
+<div class="d-flex align-items-center justify-content-center" style="padding: 1.25rem 0;">
+    <div class="card manage-card shadow">
+        <div class="manage-hero">
+            <h2 class="manage-title mb-1"><i class="bi bi-pencil-square me-2"></i>Edit Actor</h2>
+            <div class="manage-subtitle">Update actor details below</div>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" class="mb-0">
+                <div class="mb-3">
+                    <label asp-for="FirstName" class="form-label">First Name</label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="LastName" class="form-label">Last Name</label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="ActorId" />
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save me-1"></i>Save</button>
+                    <a asp-action="ListActors" class="btn btn-secondary px-4"><i class="bi bi-x-circle me-1"></i>Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
