@@ -8,14 +8,19 @@
 <div class="container my-4">
     <div class="card shadow-lg border-0 rounded-5 bg-white dashboard-main-card">
         <div class="card-body px-4 py-4">
-            <div class="text-center mb-4">
-                <h2 class="fw-bold mb-2 text-gradient dashboard-title">
-                    <i class="bi bi-info-circle me-2"></i>
-                    @Model.Title
-                </h2>
-                <p class="lead mb-0 text-secondary dashboard-subtitle">
-                    Details for this movie entry.
-                </p>
+            <div class="d-flex align-items-center justify-content-center mb-4 text-center" style="position: relative;">
+                <a asp-action="ListMovies" class="btn rounded-pill dashboard-action-btn me-3" style="position: absolute; left: 0; margin-left:22px;">
+                    <i class="bi bi-arrow-left"></i> 
+                </a>
+                <div class="flex-grow-1">
+                    <h2 class="fw-bold mb-2 text-gradient dashboard-title">
+                        <i class="bi bi-info-circle me-2"></i>
+                        @Model.Title
+                    </h2>
+                    <p class="lead mb-0 text-secondary dashboard-subtitle">
+                        Details for this movie entry.
+                    </p>
+                </div>
             </div>
 
             <div class="row g-4 justify-content-center">
@@ -89,12 +94,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="text-end mt-4">
-                <a asp-action="ListMovies" class="btn btn-outline-primary rounded-pill dashboard-action-btn">
-                    <i class="bi bi-arrow-left"></i> Back to List
-                </a>
-            </div>
         </div>
     </div>
 </div>
@@ -120,22 +119,37 @@
     }
 
     .dashboard-action-btn {
-        box-shadow: 0 2px 8px rgba(37,140,251,0.08);
-        transition: transform 0.12s, box-shadow 0.12s, background 0.12s, border-color 0.12s;
-        padding: 0.35rem 0.75rem;
+        background-color: transparent;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none;
+        color: #258cfb;
         font-size: 1.1rem;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background-color: #f8fafd;
-        border-width: 2px;
+        padding: 0.35rem 0.75rem;
+        transition: transform 0.12s, box-shadow 0.12s, background 0.12s, border-color 0.12s;
     }
 
-        .dashboard-action-btn:hover, .dashboard-action-btn:focus {
+        .dashboard-action-btn:focus,
+        .dashboard-action-btn:active,
+        .dashboard-action-btn:hover {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none;
+            background-color: rgba(37,140,251,0.08); 
+            color: #1565c0;
             transform: translateY(-2px) scale(1.08);
-            box-shadow: 0 4px 16px rgba(37,140,251,0.15);
-            opacity: 0.96;
             text-decoration: none;
+            opacity: 0.96;
+        }
+
+        .dashboard-action-btn i {
+            color: #258cfb;
+            font-size: 1.55rem;
+            line-height: 1;
+            vertical-align: middle;
         }
 
     .badge.bg-info {
