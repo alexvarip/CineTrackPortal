@@ -1,7 +1,10 @@
-﻿using CineTrackPortal.Models;
+﻿using CineTrackPortal.Data;
+using CineTrackPortal.Models;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CineTrackPortal.Data;
+using System.Globalization;
 using System.Linq;
 
 
@@ -36,7 +39,7 @@ namespace CineTrackPortal.Controllers
             return View(movies);
         }
 
-        // GET: MoviesController/Details/5
+        // GET: MoviesController/Details/{Guid}
         public async Task<IActionResult> Details(Guid id)
         {
             var movie = await _context.Movies
@@ -44,6 +47,28 @@ namespace CineTrackPortal.Controllers
                 .FirstOrDefaultAsync(m => m.MovieId == id);
             if (movie == null)
                 return NotFound();
+
+            // Read CSV at runtime and find matching row
+            var csvPath = Path.Combine(Directory.GetCurrentDirectory(), "imdb_movies_mini.csv");
+            dynamic? csvRow = null;
+
+            using (var reader = new StreamReader(csvPath))
+            using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { }))
+            {
+                var records = csv.GetRecords<dynamic>();
+                foreach (var record in records)
+                {
+                    // Match by title (and optionally date)
+                    if (string.Equals((string)record.names, movie.Title, StringComparison.OrdinalIgnoreCase))
+                    {
+                        csvRow = record;
+                        break;
+                    }
+                }
+            }
+
+            ViewBag.CsvRow = csvRow;
+
             return View(movie);
         }
 
