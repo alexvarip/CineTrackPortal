@@ -1,0 +1,134 @@
+﻿@model CineTrackPortal.Models.MovieModel
+@{
+    ViewData["Title"] = "Add New Movie";
+    var actors = ViewBag.Actors as List<SelectListItem>;
+}
+
+@if (ViewBag.EditSuccess != null && ViewBag.EditSuccess)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="editSuccessAlert">
+        New movie created successfully! Redirecting to movie list...
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <script>
+        setTimeout(function () {
+            window.location.href = '@Url.Action("ListMovies", "Movies")';
+        }, 2000);
+    </script>
+}
+
+<div class="d-flex align-items-center justify-content-center" style="padding: 1.25rem 0;">
+    <div class="card manage-card shadow">
+        <div class="manage-hero">
+            <h2 class="manage-title mb-1"><i class="bi bi-plus-circle me-2"></i>Add New Movie</h2>
+            <div class="manage-subtitle">Enter movie details below</div>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" class="mb-0">
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Date" class="form-label"></label>
+                    <input asp-for="Date" class="form-control" type="date" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Select Existing Actors</label>
+                    <select id="actorSelect" name="selectedActors" class="form-select" multiple="multiple" style="width:100%">
+                        @if (actors != null)
+                        {
+                            foreach (var actor in actors)
+                            {
+                                <option value="@actor.Value">@actor.Text</option>
+                            }
+                        }
+                    </select>
+                    <small class="form-text text-muted">You can search and select multiple actors.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Or Add New Actors</label>
+                    <div id="newActorsContainer">
+                        <div class="row g-2 mb-1 new-actor-row">
+                            <div class="col">
+                                <input name="NewActors[0].FirstName" class="form-control" placeholder="First Name" />
+                            </div>
+                            <div class="col">
+                                <input name="NewActors[0].LastName" class="form-control" placeholder="Last Name" />
+                            </div>
+                            <div class="col-auto d-flex align-items-center">
+                                <button type="button" class="btn btn-danger btn-sm remove-actor-btn" style="display:none;">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-link p-0" id="addNewActorBtn">+ Add another actor</button>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-success px-4"><i class="bi bi-save me-1"></i>Save</button>
+                    <a asp-action="Index" class="btn btn-secondary px-4"><i class="bi bi-x-circle me-1"></i>Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <script>
+
+        $(document).ready(function() {
+            $('#actorSelect').select2({
+                placeholder: "Select actors",
+                allowClear: true,
+                width: 'resolve'
+            });
+        });
+
+
+        let actorIndex = 1;
+        document.getElementById('addNewActorBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+            const container = document.getElementById('newActorsContainer');
+            const row = document.createElement('div');
+            row.className = 'row g-2 mb-1 new-actor-row';
+            row.innerHTML = `
+                <div class="col">
+                    <input name="NewActors[${actorIndex}].FirstName" class="form-control" placeholder="First Name" />
+                </div>
+                <div class="col">
+                    <input name="NewActors[${actorIndex}].LastName" class="form-control" placeholder="Last Name" />
+                </div>
+                <div class="col-auto d-flex align-items-center">
+                    <button type="button" class="btn btn-danger btn-sm remove-actor-btn">&times;</button>
+                </div>
+            `;
+            container.appendChild(row);
+            actorIndex++;
+            updateRemoveButtons();
+        });
+
+        function updateRemoveButtons() {
+            // Show remove button only if more than one new actor row
+            const rows = document.querySelectorAll('.new-actor-row');
+            rows.forEach(row => {
+                const btn = row.querySelector('.remove-actor-btn');
+                btn.style.display = (rows.length > 1) ? '' : 'none';
+                btn.onclick = function () {
+                    row.remove();
+                    updateRemoveButtons();
+                };
+            });
+        }
+        updateRemoveButtons();
+
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
