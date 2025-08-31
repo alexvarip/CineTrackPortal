@@ -248,6 +248,11 @@ footer {
     color: #adb5bd;
 }
 
+.dashboard-disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 .manage-wrapper {
     min-height: 80vh;
