@@ -1,0 +1,164 @@
+﻿@model CineTrackPortal.Models.MovieModel
+
+@{
+    ViewData["Title"] = "Movie Details";
+    dynamic csv = ViewBag.CsvRow;
+}
+
+<div class="container my-4">
+    <div class="card shadow-lg border-0 rounded-5 bg-white dashboard-main-card">
+        <div class="card-body px-4 py-4">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold mb-2 text-gradient dashboard-title">
+                    <i class="bi bi-info-circle me-2"></i>
+                    @Model.Title
+                </h2>
+                <p class="lead mb-0 text-secondary dashboard-subtitle">
+                    Details for this movie entry.
+                </p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <!-- Main Movie Info -->
+                <div class="col-12 col-lg-4">
+                    <div class="info-block p-3 rounded-4 h-100 bg-light border mx-auto" style="max-width: 340px;">
+                        <h5 class="text-gradient mb-3">Movie Info</h5>
+                        <div class="mb-2"><span class="fw-semibold text-secondary">Title:</span> @Model.Title</div>
+                        <div class="mb-2"><span class="fw-semibold text-secondary">Release Date:</span> @Model.Date.ToString("D")</div>
+                        <div class="mb-2"><span class="fw-semibold text-secondary">Movie ID:</span> <code>@Model.MovieId</code></div>
+                        <div class="mb-2">
+                            <span class="fw-semibold text-secondary">Actors:</span>
+                            @if (Model.Actors != null && Model.Actors.Any())
+                            {
+                                <span>
+                                    @foreach (var actor in Model.Actors)
+                                    {
+                                        <span class="badge bg-light text-primary border border-primary me-1 mb-1">@actor.FirstName @actor.LastName</span>
+                                    }
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-secondary">No actors</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IMDB Info -->
+                <div class="col-12 col-lg-8">
+                    <div class="info-block p-3 rounded-4 h-100 bg-light border">
+                        <h5 class="text-gradient mb-3">IMDB Data</h5>
+                        @if (csv != null)
+                        {
+                            <div class="mb-2"><span class="fw-semibold text-secondary">IMDB Title:</span> @csv.names</div>
+                            <div class="mb-2"><span class="fw-semibold text-secondary">IMDB Release Date:</span> @csv.date_x</div>
+                            <div class="mb-2">
+                                <span class="fw-semibold text-secondary">Score:</span>
+                                <span class="badge bg-info text-dark fs-6 px-3 py-2">@csv.score</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="fw-semibold text-secondary">Genre:</span>
+                                <span class="badge bg-light text-primary border border-primary">@csv.genre</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="fw-semibold text-secondary">Overview:</span>
+                                <span class="text-secondary small">@csv.overview</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="fw-semibold text-secondary">Crew:</span>
+                                <span class="text-secondary small">@csv.crew</span>
+                            </div>
+                            <div class="mb-2"><span class="fw-semibold text-secondary">Original Title:</span> @csv.orig_title</div>
+                            <div class="mb-2"><span class="fw-semibold text-secondary">Status:</span> @csv.status</div>
+                            <div class="mb-2"><span class="fw-semibold text-secondary">Original Language:</span> @csv.orig_lang</div>
+                            <div class="mb-2">
+                                <span class="fw-semibold text-secondary">Budget:</span>
+                                <span class="badge bg-light text-success border border-success">@csv.budget_x</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="fw-semibold text-secondary">Revenue:</span>
+                                <span class="badge bg-light text-success border border-success">@csv.revenue</span>
+                            </div>
+                            <div class="mb-2"><span class="fw-semibold text-secondary">Country:</span> @csv.country</div>
+                        }
+                        else
+                        {
+                            <div class="text-secondary">No additional IMDB data found for this movie.</div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end mt-4">
+                <a asp-action="ListMovies" class="btn btn-outline-primary rounded-pill dashboard-action-btn">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-main-card {
+        /* Inherit your dashboard card style */
+    }
+
+    .dashboard-title {
+        /* Inherit your dashboard title style */
+    }
+
+    .dashboard-subtitle {
+        /* Inherit your dashboard subtitle style */
+    }
+
+    .text-gradient {
+        background: linear-gradient(90deg, #258cfb 60%, #6a82fb 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .dashboard-action-btn {
+        box-shadow: 0 2px 8px rgba(37,140,251,0.08);
+        transition: transform 0.12s, box-shadow 0.12s, background 0.12s, border-color 0.12s;
+        padding: 0.35rem 0.75rem;
+        font-size: 1.1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8fafd;
+        border-width: 2px;
+    }
+
+        .dashboard-action-btn:hover, .dashboard-action-btn:focus {
+            transform: translateY(-2px) scale(1.08);
+            box-shadow: 0 4px 16px rgba(37,140,251,0.15);
+            opacity: 0.96;
+            text-decoration: none;
+        }
+
+    .badge.bg-info {
+        background: linear-gradient(90deg, #b6e0fe 60%, #258cfb 100%);
+        color: #1565c0;
+        font-weight: 600;
+    }
+
+    .badge.bg-light.text-primary {
+        background: #f0f8ff;
+        color: #258cfb;
+        font-weight: 500;
+    }
+
+    .badge.bg-light.text-success {
+        background: #e6f9f0;
+        color: #2e7d32;
+        font-weight: 500;
+    }
+
+    .info-block {
+        min-height: 350px;
+        box-shadow: 0 2px 8px rgba(37,140,251,0.04);
+    }
+   
+</style>
