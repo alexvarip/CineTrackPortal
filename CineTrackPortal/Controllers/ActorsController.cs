@@ -1,7 +1,5 @@
 ﻿using CineTrackPortal.Data;
 using CineTrackPortal.Models;
-using CsvHelper;
-using CsvHelper.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -65,57 +63,57 @@ namespace CineTrackPortal.Controllers
         // POST: ActorsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MovieModel movie)
+        public async Task<IActionResult> Create(ActorModel actor)
         {
             if (ModelState.IsValid)
             {
-                movie.MovieId = Guid.NewGuid();
-                _context.Movies.Add(movie);
+                actor.ActorId = Guid.NewGuid();
+                _context.Actors.Add(actor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(movie);
+            return View(actor);
         }
 
 
         // GET: ActorsController/Edit/{Guid}
         public async Task<IActionResult> Edit(Guid id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
+            var actor = await _context.Actors.FindAsync(id);
+            if (actor == null)
                 return NotFound();
-            return View(movie);
+            return View(actor);
         }
 
 
         // POST: ActorsController/Edit/{Guid}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("MovieId, Title, Date")] MovieModel movie)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ActorId, FirstName, LastName")] ActorModel actor)
         {
-            if (id != movie.MovieId)
+            if (id != actor.ActorId)
                 return BadRequest();
 
             if (!ModelState.IsValid)
-                return View(movie);
+                return View(actor);
 
-            // Only update Title and Date, not navigation properties
-            var movieToUpdate = await _context.Movies.FindAsync(id);
-            if (movieToUpdate == null)
+            // Only update FirstName and LastName, not navigation properties
+            var actorToUpdate = await _context.Actors.FindAsync(id);
+            if (actorToUpdate == null)
                 return NotFound();
 
-            movieToUpdate.Title = movie.Title;
-            movieToUpdate.Date = movie.Date;
+            actorToUpdate.FirstName = actor.FirstName;
+            actorToUpdate.LastName = actor.LastName;
 
             try
             {
                 await _context.SaveChangesAsync();
                 ViewBag.EditSuccess = true;
-                return View(movieToUpdate); // Return the view with the updated model and success flag
+                return View(actorToUpdate); // Return the view with the updated model and success flag
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Movies.Any(e => e.MovieId == id))
+                if (!_context.Actors.Any(e => e.ActorId == id))
                     return NotFound();
                 throw;
             }
@@ -125,10 +123,10 @@ namespace CineTrackPortal.Controllers
         // GET: ActorsController/Delete/Guid
         public async Task<IActionResult> Delete(Guid id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
+            var actor = await _context.Actors.FindAsync(id);
+            if (actor == null)
                 return NotFound();
-            return View(movie);
+            return View(actor);
         }
 
 
@@ -137,20 +135,20 @@ namespace CineTrackPortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var movie = await _context.Movies
-                    .Include(m => m.Actors)
-                    .FirstOrDefaultAsync(m => m.MovieId == id);
+            var actor = await _context.Actors
+                    .Include(m => m.Movies)
+                    .FirstOrDefaultAsync(m => m.ActorId == id);
 
-            if (movie == null)
+            if (actor == null)
                 return NotFound();
 
             // Remove associated actors
-            if (movie.Actors != null && movie.Actors.Any())
+            if (actor.Movies != null && actor.Movies.Any())
             {
-                _context.Actors.RemoveRange(movie.Actors);
+                _context.Movies.RemoveRange(actor.Movies);
             }
 
-            _context.Movies.Remove(movie);
+            _context.Actors.Remove(actor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(ListActors));
         }
