@@ -4,6 +4,19 @@
     ViewData["Title"] = "Delete Movie";
 }
 
+@if (ViewBag.EditSuccess != null && ViewBag.EditSuccess)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="editSuccessAlert">
+        Movie deleted successfully! All associated actors remain in the database, but are no longer linked to this movie. Redirecting to movie list...
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <script>
+        setTimeout(function () {
+            window.location.href = '@Url.Action("ListMovies", "Movies")';
+        }, 2000);
+    </script>
+}
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -20,8 +33,9 @@
                         <dt class="col-sm-3">Date</dt>
                         <dd class="col-sm-9">@Model.Date.ToShortDateString()</dd>
                     </dl>
+
                     <div class="alert alert-warning mt-4" role="alert">
-                        <strong>Warning:</strong> Deleting this movie will also delete all associated actors.
+                        <strong>Note:</strong> Deleting this movie will <b>not</b> delete any actors, but will remove the association between this movie and its actors.
                     </div>
                     <form asp-action="Delete" method="post" id="deleteForm" class="mt-3">
                         <input type="hidden" asp-for="MovieId" />
