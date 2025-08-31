@@ -27,7 +27,7 @@ namespace CineTrackPortal
 
             builder.Services.AddScoped<IMoviesService, MoviesRepository>();
             builder.Services.AddScoped<IActorsService, ActorsRepository>();
-            builder.Services.AddScoped<IUsersService, UsersRepository>();
+            //builder.Services.AddScoped<IUsersService, UsersRepository>();
 
             var app = builder.Build();
 
@@ -55,6 +55,16 @@ namespace CineTrackPortal
                 .WithStaticAssets();
             app.MapRazorPages()
                .WithStaticAssets();
+
+            // Seed CSV data
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<ApplicationDbContext>();
+                //context.Database.Migrate(); // Ensure DB is created
+
+                CsvDataSeeder.SeedMoviesFromCsv(context, "imdb_movies_mini.csv");
+            }
 
             app.Run();
         }
