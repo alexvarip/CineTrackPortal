@@ -132,9 +132,6 @@ namespace CineTrackPortal.Controllers
                 await _context.SaveChangesAsync();
                 ViewBag.EditSuccess = true;
                 return View(movieToUpdate); // Return the view with the updated model and success flag
-
-                //TempData["EditSuccess"] = "Movie updated successfully!";
-                //return RedirectToAction(actionName: nameof(Details), new { id = movie.MovieId });
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -145,7 +142,7 @@ namespace CineTrackPortal.Controllers
         }
 
 
-        // GET: MoviesController/Delete/5
+        // GET: MoviesController/Delete/Guid
         public async Task<IActionResult> Delete(Guid id)
         {
             var movie = await _context.Movies.FindAsync(id);
@@ -155,18 +152,27 @@ namespace CineTrackPortal.Controllers
         }
 
 
-        // POST: MoviesController/Delete/5
+        // POST: MoviesController/Delete/Guid
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie != null)
+            var movie = await _context.Movies
+                    .Include(m => m.Actors)
+                    .FirstOrDefaultAsync(m => m.MovieId == id);
+
+            if (movie == null)
+                return NotFound();
+
+            // Remove associated actors
+            if (movie.Actors != null && movie.Actors.Any())
             {
-                _context.Movies.Remove(movie);
-                await _context.SaveChangesAsync();
+                _context.Actors.RemoveRange(movie.Actors);
             }
-            return RedirectToAction(nameof(Index));
+
+            _context.Movies.Remove(movie);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(ListMovies));
         }
 
 
