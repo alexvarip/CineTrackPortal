@@ -29,7 +29,7 @@
                     <tbody>
                         @foreach (var movie in Model)
                         {
-                            <tr class="selectable-row" tabindex="0" data-movie-id="@movie.MovieId">
+                            <tr class="selectable-row" tabindex="0" data-movie-id="@movie.MovieId" onclick="window.location.href='@Url.Action("Details", "Movies", new { id = movie.MovieId })'">
                                 <td>@movie.Title</td>
                                 <td>@movie.Date.ToShortDateString()</td>
                                 <td>
