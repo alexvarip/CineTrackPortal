@@ -1,15 +1,14 @@
 ﻿using CineTrackPortal.Data;
 using CineTrackPortal.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using System.Linq;
-using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
-
 
 namespace CineTrackPortal.Controllers
 {
+    [Authorize]
     public class ActorsController : Controller
     {
         private readonly ApplicationDbContext _context;
