@@ -1,0 +1,134 @@
+﻿@model CineTrackPortal.Models.ActorModel
+@{
+    ViewData["Title"] = "Add New Actor";
+    var movies = ViewBag.Movies as List<SelectListItem>;
+}
+
+@if (ViewBag.EditSuccess != null && ViewBag.EditSuccess)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="editSuccessAlert">
+        New actor created successfully! Redirecting to actor list...
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <script>
+        setTimeout(function () {
+            window.location.href = '@Url.Action("ListActors", "Actors")';
+        }, 2000);
+    </script>
+}
+
+<div class="d-flex align-items-center justify-content-center" style="padding: 1.25rem 0;">
+    <div class="card manage-card shadow">
+        <div class="manage-hero">
+            <h2 class="manage-title mb-1"><i class="bi bi-plus-circle me-2"></i>Add New Actor</h2>
+            <div class="manage-subtitle">Enter actor details below</div>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" class="mb-0">
+                <div class="mb-3">
+                    <label asp-for="FirstName" class="form-label">First Name</label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="LastName" class="form-label">Last Name</label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Select Existing Movies</label>
+                    <select id="movieSelect" name="selectedMovies" class="form-select" multiple="multiple" style="width:100%">
+                        @if (movies != null)
+                        {
+                            foreach (var movie in movies)
+                            {
+                                <option value="@movie.Value">@movie.Text</option>
+                            }
+                        }
+                    </select>
+                    <small class="form-text text-muted">You can search and select multiple movies.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Or Add New Movies</label>
+                    <div id="newMoviesContainer">
+                        <div class="row g-2 mb-1 new-movie-row">
+                            <div class="col">
+                                <input name="NewMovies[0].Title" class="form-control" placeholder="Title" />
+                            </div>
+                            <div class="col">
+                                <input name="NewMovies[0].Date" class="form-control" placeholder="Date" />
+                            </div>
+                            <div class="col-auto d-flex align-items-center">
+                                <button type="button" class="btn btn-danger btn-sm remove-movie-btn" style="display:none;">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-link p-0" id="addNewMovieBtn">+ Add another movie</button>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-success px-4"><i class="bi bi-save me-1"></i>Save</button>
+                    <a asp-action="Index" class="btn btn-secondary px-4"><i class="bi bi-x-circle me-1"></i>Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+            $('#movieSelect').select2({
+                placeholder: "Select movies",
+                allowClear: true,
+                width: 'resolve'
+            });
+        });
+
+
+        let movieIndex = 1;
+        document.getElementById('addNewMovieBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+            const container = document.getElementById('newMoviesContainer');
+            const row = document.createElement('div');
+            row.className = 'row g-2 mb-1 new-movie-row';
+            row.innerHTML = `
+                <div class="col">
+                    <input name="NewMovies[${movieIndex}].Title" class="form-control" placeholder="Title" />
+                </div>
+                <div class="col">
+                    <input name="NewMovies[${movieIndex}].Date" class="form-control" placeholder="Date" />
+                </div>
+                <div class="col-auto d-flex align-items-center">
+                    <button type="button" class="btn btn-danger btn-sm remove-movie-btn">&times;</button>
+                </div>
+            `;
+            container.appendChild(row);
+            movieIndex++;
+            updateRemoveButtons();
+        });
+
+        function updateRemoveButtons() {
+            // Show remove button only if more than one new actor row
+            const rows = document.querySelectorAll('.new-movie-row');
+            rows.forEach(row => {
+                const btn = row.querySelector('.remove-movie-btn');
+                btn.style.display = (rows.length > 1) ? '' : 'none';
+                btn.onclick = function () {
+                    row.remove();
+                    updateRemoveButtons();
+                };
+            });
+        }
+        updateRemoveButtons();
+
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
