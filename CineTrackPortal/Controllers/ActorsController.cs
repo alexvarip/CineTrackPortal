@@ -28,16 +28,48 @@ namespace CineTrackPortal.Controllers
 
 
         // GET: ActorsController/List
-        public async Task<IActionResult> ListActors(int pageIndex = 1)
+        public async Task<IActionResult> ListActors(string searchTerm, int pageIndex = 1)
         {
             var query = _context.Actors
                 .Include(m => m.Movies)
-                .OrderBy(m => m.FirstName)
-                .AsNoTracking();
+                .AsQueryable();
 
-            var actors = await PaginatedList<ActorModel>.CreateAsync(query, pageIndex, PageSize);
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(a =>
+                    a.FirstName.Contains(searchTerm) ||
+                    a.LastName.Contains(searchTerm));
+            }
+
+            var actors = await PaginatedList<ActorModel>.CreateAsync(
+                query.OrderBy(m => m.FirstName), pageIndex, 10);
+
+            ViewBag.SearchTerm = searchTerm;
 
             return View(actors);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> SearchActors(string searchTerm, int pageIndex = 1)
+        {
+            var query = _context.Actors
+                .Include(a => a.Movies)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(a =>
+                    a.FirstName.Contains(searchTerm) ||
+                    a.LastName.Contains(searchTerm));
+            }
+
+            var actors = await PaginatedList<ActorModel>.CreateAsync(
+                query.OrderBy(a => a.FirstName), pageIndex, 10);
+
+            ViewBag.SearchTerm = searchTerm;
+
+            return PartialView("_ActorsTablePartial", actors);
         }
 
 
@@ -214,7 +246,7 @@ namespace CineTrackPortal.Controllers
                 .Select(a => new SelectListItem
                 {
                     Value = a.MovieId.ToString(),
-                    Text = a.Title + " - " + a.Date.ToShortDateString(),
+                    Text = a.Title + " - " + a.Date.ToLongDateString(),
                     Selected = selectedMovies != null && selectedMovies.Contains(a.MovieId)
                 }).ToList();
             ViewBag.Movies = movies;

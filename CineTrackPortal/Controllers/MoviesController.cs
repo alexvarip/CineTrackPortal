@@ -29,16 +29,44 @@ namespace CineTrackPortal.Controllers
 
 
         // GET: MoviesController/List
-        public async Task<IActionResult> ListMovies(int pageIndex = 1)
+        public async Task<IActionResult> ListMovies(string searchTerm, int pageIndex = 1)
         {
             var query = _context.Movies
-                .Include(m => m.Actors)
-                .OrderBy(m => m.Title)
-                .AsNoTracking();
+                 .Include(m => m.Actors)
+                 .AsQueryable();
 
-            var movies = await PaginatedList<MovieModel>.CreateAsync(query, pageIndex, PageSize);
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(m => m.Title.Contains(searchTerm));
+            }
+
+            var movies = await PaginatedList<MovieModel>.CreateAsync(
+                query.OrderBy(m => m.Title), pageIndex, 10);
+
+            ViewBag.SearchTerm = searchTerm;
 
             return View(movies);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> SearchMovies(string searchTerm, int pageIndex = 1)
+        {
+            var query = _context.Movies
+                  .Include(m => m.Actors)
+                  .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(m => m.Title.Contains(searchTerm));
+            }
+
+            var movies = await PaginatedList<MovieModel>.CreateAsync(
+                            query.OrderBy(m => m.Title), pageIndex, 10);
+
+            ViewBag.SearchTerm = searchTerm;
+
+            return PartialView("_MoviesTablePartial", movies);
         }
 
 
