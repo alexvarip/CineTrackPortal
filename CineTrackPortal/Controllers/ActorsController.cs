@@ -58,7 +58,7 @@ namespace CineTrackPortal.Controllers
         // GET: ActorsController/Create
         public IActionResult Create()
         {
-            PopulateActorsDropDownList();
+            PopulateMoviesDropDownList();
             return View();
         }
 
@@ -66,8 +66,9 @@ namespace CineTrackPortal.Controllers
         // POST: ActorsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ActorModel actor, Guid[] selectedMovies)
+        public async Task<IActionResult> Create(ActorModel actor, Guid[] selectedMovies, List<MovieModel> NewMovies)
         {
+            // Add selected existing movies
             if (selectedMovies != null)
             {
                 actor.Movies = new List<MovieModel>();
@@ -80,6 +81,25 @@ namespace CineTrackPortal.Controllers
                     }
                 }
             }
+            else
+            {
+                actor.Movies = new List<MovieModel>();
+            }
+
+            // Add new movies from the form
+            if (NewMovies != null)
+            {
+                foreach (var newMovie in NewMovies)
+                {
+                    // Only add if both names are provided
+                    if (!string.IsNullOrWhiteSpace(newMovie.Title) && newMovie.Date != default)
+                    {
+                        newMovie.MovieId = Guid.NewGuid();
+                        _context.Movies.Add(newMovie);
+                        actor.Movies.Add(newMovie);
+                    }
+                }
+            }
 
             // Check for existing actor by Last Name (case-insensitive)
             var exists = await _context.Actors
@@ -88,7 +108,7 @@ namespace CineTrackPortal.Controllers
             if (exists)
             {
                 ModelState.AddModelError("Title", "An actor with this last name already exists.");
-                PopulateActorsDropDownList(selectedMovies);
+                PopulateMoviesDropDownList(selectedMovies);
                 return View(actor);
             }
 
@@ -98,12 +118,12 @@ namespace CineTrackPortal.Controllers
                 _context.Actors.Add(entity: actor);
                 await _context.SaveChangesAsync();
                 ViewBag.EditSuccess = true;
-                PopulateActorsDropDownList();
+                PopulateMoviesDropDownList();
                 return View(actor); // Return the same view to show the alert
             }
 
             // Repopulate dropdown if validation fails
-            PopulateActorsDropDownList(selectedMovies);
+            PopulateMoviesDropDownList(selectedMovies);
             return View(actor);
         }
 
@@ -187,17 +207,17 @@ namespace CineTrackPortal.Controllers
         }
 
 
-        // Helper to populate ViewBag.Actors for dropdown/multiselect
-        private void PopulateActorsDropDownList(IEnumerable<Guid>? selectedActors = null)
+        // Helper to populate ViewBag.Movies for dropdown/multiselect
+        private void PopulateMoviesDropDownList(IEnumerable<Guid>? selectedMovies = null)
         {
-            var actors = _context.Actors
+            var movies = _context.Movies
                 .Select(a => new SelectListItem
                 {
-                    Value = a.ActorId.ToString(),
-                    Text = a.FirstName + " " + a.LastName,
-                    Selected = selectedActors != null && selectedActors.Contains(a.ActorId)
+                    Value = a.MovieId.ToString(),
+                    Text = a.Title + " - " + a.Date.ToShortDateString(),
+                    Selected = selectedMovies != null && selectedMovies.Contains(a.MovieId)
                 }).ToList();
-            ViewBag.Actors = actors;
+            ViewBag.Movies = movies;
         }
 
 
