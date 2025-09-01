@@ -1,0 +1,43 @@
+﻿@model CineTrackPortal.Models.PaginatedList<CineTrackPortal.Models.ActorModel>
+
+<tbody>
+    @foreach (var actor in Model)
+    {
+        <tr class="selectable-row" tabindex="0" data-actor-id="@actor.ActorId" onclick="window.location.href='@Url.Action("Details", "Actors", new { id = actor.ActorId })'">
+            <td>@actor.FirstName</td>
+            <td>@actor.LastName</td>
+            <td>
+                @if (actor.Movies != null && actor.Movies.Any())
+                {
+                    var movieNames = actor.Movies.Select(a => a.Title).ToList();
+                    var firstTwo = movieNames.Take(2).ToList();
+                    var remainingCount = movieNames.Count - 2;
+                    var tooltip = string.Join(", ", movieNames);
+
+                    <span class="movie-tooltip" data-bs-toggle="tooltip" data-bs-placement="auto" title="@tooltip">
+                        @string.Join(", ", firstTwo)
+                        @if (remainingCount > 0)
+                        {
+                            <span class="text-primary fw-semibold">+@remainingCount more</span>
+                        }
+                    </span>
+                }
+                else
+                {
+                    <span class="text-secondary">No actors</span>
+                }
+            </td>
+            <td class="text-end">
+                <a asp-action="Details" asp-route-id="@actor.ActorId" class="btn btn-sm btn-outline-info rounded-pill dashboard-action-btn me-1" title="Details" data-bs-toggle="tooltip" data-bs-placement="auto">
+                    <i class="bi bi-info-circle"></i>
+                </a>
+                <a asp-action="Edit" asp-route-id="@actor.ActorId" class="btn btn-sm btn-outline-warning rounded-pill dashboard-action-btn me-1" title="Edit" data-bs-toggle="tooltip" data-bs-placement="auto">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+                <a asp-action="Delete" asp-route-id="@actor.ActorId" class="btn btn-sm btn-outline-danger rounded-pill dashboard-action-btn" title="Delete" data-bs-toggle="tooltip" data-bs-placement="auto">
+                    <i class="bi bi-trash3"></i>
+                </a>
+            </td>
+        </tr>
+    }
+</tbody>
