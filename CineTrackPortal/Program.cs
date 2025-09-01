@@ -53,14 +53,17 @@ namespace CineTrackPortal
             app.MapRazorPages()
                .WithStaticAssets();
 
-            // Seed CSV data
+            // Seed CSV movie data at startup
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<ApplicationDbContext>();
                 //context.Database.Migrate(); // Ensure DB is created
 
-                CsvDataSeeder.SeedMoviesFromCsv(context, "imdb_movies_mini.csv");
+                var configuration = services.GetRequiredService<IConfiguration>();
+                var csvPath = configuration.GetSection("SeedMoviesData")["CsvPath"] ?? "imdb_movies_mini.csv";
+
+                CsvDataSeeder.SeedMoviesFromCsv(context, csvPath);
             }
 
             app.Run();
