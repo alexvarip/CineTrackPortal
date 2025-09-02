@@ -1,0 +1,88 @@
+﻿@model CineTrackPortal.Models.ExtendedUserModel
+
+@{
+    ViewData["Title"] = "User Details";
+    var returnUrl = Context.Request.Query["returnUrl"].FirstOrDefault();
+    var isLocal = !string.IsNullOrEmpty(returnUrl) && returnUrl.StartsWith("/");
+    var backUrl = isLocal ? returnUrl : Url.Action("ListUsers", "UserManagement");
+}
+
+<div class="container my-4">
+    <div class="card shadow-lg border-0 rounded-5 bg-white dashboard-main-card">
+        <div class="card-body px-4 py-4">
+            <div class="d-flex align-items-center justify-content-center mb-4 text-center" style="position: relative;">
+                <a href="@backUrl" class="btn rounded-pill dashboard-action-arrow-btn me-3" style="position: absolute; left: 0; margin-left:22px;">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <div class="flex-grow-1">
+                    <h2 class="fw-bold mb-2 text-gradient dashboard-title">
+                        <i class="bi bi-info-circle me-2"></i>
+                        @Model.FirstName @Model.LastName
+                    </h2>
+                    <p class="lead mb-0 text-secondary dashboard-subtitle">
+                        Details for this user entry.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <!-- Main User Info -->
+                <div class="col-12 col-lg-4">
+                    <div class="info-block p-3 rounded-4 h-100 bg-light border mx-auto" style="max-width: 340px;">
+                        <h5 class="text-gradient mb-3">User Info</h5>
+                        <div class="mb-2"><span class="fw-semibold text-secondary">First Name:</span> @Model.FirstName</div>
+                        <div class="mb-2"><span class="fw-semibold text-secondary">Last Name:</span> @Model.LastName</div>
+                        <div class="mb-2"><span class="fw-semibold text-secondary">Username:</span> <code>@Model.UserName</code></div>
+                        <div class="mb-2"><span class="fw-semibold text-secondary">Email:</span> <code>@Model.Email</code></div>
+                        <div class="mb-2"><span class="fw-semibold text-secondary">EmailConfirmed:</span> <code>@Model.EmailConfirmed</code></div>
+                        <div class="mb-2"><span class="fw-semibold text-secondary">User Id:</span> <code>@Model.Id</code></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-main-card {
+        /* Inherit your dashboard card style */
+    }
+
+    .dashboard-title {
+        /* Inherit your dashboard title style */
+    }
+
+    .dashboard-subtitle {
+        /* Inherit your dashboard subtitle style */
+    }
+
+    .text-gradient {
+        background: linear-gradient(90deg, #258cfb 60%, #6a82fb 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .badge.bg-info {
+        background: linear-gradient(90deg, #b6e0fe 60%, #258cfb 100%);
+        color: #1565c0;
+        font-weight: 600;
+    }
+
+    .badge.bg-light.text-primary {
+        background: #f0f8ff;
+        color: #258cfb;
+        font-weight: 500;
+    }
+
+    .badge.bg-light.text-success {
+        background: #e6f9f0;
+        color: #2e7d32;
+        font-weight: 500;
+    }
+
+    .info-block {
+        min-height: 350px;
+        box-shadow: 0 2px 8px rgba(37,140,251,0.04);
+    }
+</style>
