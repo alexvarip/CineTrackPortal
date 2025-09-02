@@ -4,9 +4,8 @@ An ASP.NET Core MVC (Razor Views) web-based application for cinema records manag
 
 ## Features
 
-- **Movie Management:** List, search, create, edit, and delete movies with actor association.
-- **Actor Management:** Add, view, and manage actor records with associated movies.
-- **User Management:** Add, view, and manage movie records.
+- **Movie/Actor Management:** List, view, search, create, edit, and delete movies/actors with actors/movies association.
+- **User Management:** Add, view, and manage system user records.
 - **Dashboard:** Navigation links to movie, actor and user management.
 - **Historical Info:** View basic historical data for each movie record.
 - **Interactive UI:** Movie, Actor and User selection, management, and alert handling using partial views for dynamic content updates.
