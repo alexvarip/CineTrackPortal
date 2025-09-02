@@ -1,6 +1,6 @@
 # CineTrack Portal
 
-An ASP.NET Core MVC (Razor Views) web-based application for cinema records management and movie tracking. Built with ASP.NET Core (.NET 9) and Entity Framework Core.
+An ASP.NET Core MVC (Razor Views) web-based application for cinema records management and tracking. Built with ASP.NET Core (.NET 9) and Entity Framework Core.
 
 ## Features
 
@@ -8,7 +8,7 @@ An ASP.NET Core MVC (Razor Views) web-based application for cinema records manag
 - **Actor Management:** Add, view, and manage actor records with associated movies.
 - **User Management:** Add, view, and manage movie records.
 - **Dashboard:** Navigation links to movie, actor and user management.
-- **Historical Info:** View basic historical data each movie record.
+- **Historical Info:** View basic historical data for each movie record.
 - **Interactive UI:** Movie, Actor and User selection, management, and alert handling using partial views for dynamic content updates.
 - **Responsive Design:** Modern, responsive, mobile-friendly layout using Bootstrap. Built with Razor Views for fast and secure web experiences.
 - **Authentication:** User authentication via ASP.NET Core Identity with secure login, registration, and account management.
@@ -45,7 +45,7 @@ An ASP.NET Core MVC (Razor Views) web-based application for cinema records manag
 
 > **Note:** 
 > - If you restore the database from a SQL backup file, you usually do not need to apply migrations unless new migrations have been added since the backup was created. 
-> - If in doubt, you can run `dotnet ef database update` (#Database Migration Setup) to ensure the database schema is current.
+> - If in doubt, you can run `dotnet ef database update` to ensure the database schema is current.
 	
 ## Restoring the Database from a SQL Backup
 
@@ -121,7 +121,7 @@ If you have a SQL backup file (`.sql` or `.bak`), follow these steps to restore 
 - `/Views/UserManagement/`                # UserManagement controller views (e.g., Index.cshtml, Create.cshtml, Edit.cshtml, Details.cshtml)
 - `/wwwroot/`                             # Static files (CSS, JS, images)
 
-### Database Migration Setup
+## Database Migration Setup
 
 1. **Install EF Core Tools (if not already installed):**
 
@@ -136,7 +136,7 @@ If you have a SQL backup file (`.sql` or `.bak`), follow these steps to restore 
 > - Run these commands from the project directory containing the `.csproj` file.
 > - For SQLite, ensure the database file path is accessible and writable.
 
-#### Data Seeding Details
+### Data Seeding Details
 
 - **Migration-based seeding:**  
   The initial database migration seeds two actors (Tom Hanks, Meryl Streep), two movies ("Forrest Gump", "The Post"), and their relationships. This ensures the database always has basic demo data after migration.
@@ -148,16 +148,16 @@ If you have a SQL backup file (`.sql` or `.bak`), follow these steps to restore 
   - Adds new actors if they do not exist.
   - Associates actors with movies and saves all changes.
 
-## Initial Sample Data
+### Initial Sample Data
 
 - **Movies/Actors**
   - Forrest Gump (1994), Tom Hanks
   - The Post (2017), Tom Hanks, Meryl Streep
 
-## API Documentation
+### API Documentation
 
 - See [API Endpoints](#architecture-overview) for available routes and usage.
 
-## License
+### License
 
 This project is licensed under the MIT License.
