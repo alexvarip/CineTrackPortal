@@ -6,7 +6,6 @@ using System.Diagnostics;
 
 namespace CineTrackPortal.Controllers
 {
-    [Authorize]
     public class DashboardController : Controller
     {
         private readonly ILogger<DashboardController> _logger;
@@ -18,6 +17,7 @@ namespace CineTrackPortal.Controllers
             _context = context;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             if (User.Identity != null && User.Identity.IsAuthenticated)
