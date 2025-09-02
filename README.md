@@ -121,7 +121,7 @@ If you have a SQL backup file (`.sql` or `.bak`), follow these steps to restore 
 - `/Views/UserManagement/`                # UserManagement controller views (e.g., Index.cshtml, Create.cshtml, Edit.cshtml, Details.cshtml)
 - `/wwwroot/`                             # Static files (CSS, JS, images)
 
-### Database Migration Setup
+## Database Migration Setup
 
 1. **Install EF Core Tools (if not already installed):**
 
@@ -136,7 +136,7 @@ If you have a SQL backup file (`.sql` or `.bak`), follow these steps to restore 
 > - Run these commands from the project directory containing the `.csproj` file.
 > - For SQLite, ensure the database file path is accessible and writable.
 
-#### Data Seeding Details
+### Data Seeding Details
 
 - **Migration-based seeding:**  
   The initial database migration seeds two actors (Tom Hanks, Meryl Streep), two movies ("Forrest Gump", "The Post"), and their relationships. This ensures the database always has basic demo data after migration.
@@ -148,7 +148,7 @@ If you have a SQL backup file (`.sql` or `.bak`), follow these steps to restore 
   - Adds new actors if they do not exist.
   - Associates actors with movies and saves all changes.
 
-## Initial Sample Data
+### Initial Sample Data
 
 - **Movies/Actors**
   - Forrest Gump (1994), Tom Hanks
