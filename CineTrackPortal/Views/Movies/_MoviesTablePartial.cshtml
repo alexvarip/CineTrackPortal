@@ -9,7 +9,7 @@
             <td>
                 @if (movie.Actors != null && movie.Actors.Any())
                 {
-                    var actorNames = movie.Actors.Select(a => a.FirstName).ToList();
+                    var actorNames = movie.Actors.Select(a => $"{a.FirstName} {a.LastName}").ToList();
                     var firstTwo = actorNames.Take(2).ToList();
                     var remainingCount = actorNames.Count - 2;
                     var tooltip = string.Join(", ", actorNames);
