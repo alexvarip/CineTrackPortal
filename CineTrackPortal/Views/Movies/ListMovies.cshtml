@@ -190,7 +190,7 @@
             border-color: #ff8a80;
         }
 
- 
+
     /* Enhanced table and row styles */
     .table {
         border-collapse: separate;
@@ -269,7 +269,11 @@
 
     .actor-tooltip {
         display: inline-block;
-        cursor: pointer;
+        max-width: 200px; /* adjust as needed */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: middle;
     }
 
     /* Custom tooltip background, text color, border, and font */
