@@ -24,6 +24,7 @@
             <div class="manage-subtitle">Enter actor details below</div>
         </div>
         <div class="card-body">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <form asp-action="Create" method="post" class="mb-0">
                 <div class="mb-3">
                     <label asp-for="FirstName" class="form-label">First Name</label>
@@ -49,21 +50,10 @@
                     <small class="form-text text-muted">You can search and select multiple movies.</small>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Or Add New Movies</label>
-                    <div id="newMoviesContainer">
-                        <div class="row g-2 mb-1 new-movie-row">
-                            <div class="col">
-                                <input name="NewMovies[0].Title" class="form-control" placeholder="Title" />
-                            </div>
-                            <div class="col">
-                                <input name="NewMovies[0].Date" class="form-control" placeholder="Date" />
-                            </div>
-                            <div class="col-auto d-flex align-items-center">
-                                <button type="button" class="btn btn-danger btn-sm remove-movie-btn" style="display:none;">&times;</button>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-link p-0" id="addNewMovieBtn">+ Add another movie</button>
+                    <div id="newMoviesContainer"></div>
+                    <button type="button" class="btn btn-outline-primary btn-sm d-inline-flex align-items-center" id="addNewMovieBtn">
+                        <i class="bi bi-plus-circle me-1"></i> Add another movie
+                    </button>
                 </div>
                 <div class="d-flex gap-2 mt-3">
                     <button type="submit" class="btn btn-success px-4"><i class="bi bi-save me-1"></i>Save</button>
@@ -90,7 +80,7 @@
         });
 
 
-        let movieIndex = 1;
+        let movieIndex = 0;
         document.getElementById('addNewMovieBtn').addEventListener('click', function (e) {
             e.preventDefault();
             const container = document.getElementById('newMoviesContainer');
@@ -101,7 +91,7 @@
                     <input name="NewMovies[${movieIndex}].Title" class="form-control" placeholder="Title" />
                 </div>
                 <div class="col">
-                    <input name="NewMovies[${movieIndex}].Date" class="form-control" placeholder="Date" />
+                    <input name="NewMovies[${movieIndex}].Date" class="form-control" placeholder="Date" type="date" />
                 </div>
                 <div class="col-auto d-flex align-items-center">
                     <button type="button" class="btn btn-danger btn-sm remove-movie-btn">&times;</button>
@@ -112,19 +102,36 @@
             updateRemoveButtons();
         });
 
+          $('form').on('submit', function (e) {
+                 let hasEmptyNewMovie = false;
+                 $('.new-movie-row').each(function () {
+                     const title = $(this).find('input[name*="Title"]').val().trim();
+                     const date = $(this).find('input[name*="Date"]').val().trim();
+                     if (!title && !date) {
+                         hasEmptyNewMovie = true;
+                     }
+                 });
+                 if (hasEmptyNewMovie) {
+                     console.log('Preventing submit due to empty new movie row');
+                     e.preventDefault();
+                     alert('Please fill in all new movie fields or remove empty rows before saving.');
+                     return false;
+                 }
+             });
+
+
         function updateRemoveButtons() {
-            // Show remove button only if more than one new actor row
+            // Always show the remove button for every row
             const rows = document.querySelectorAll('.new-movie-row');
             rows.forEach(row => {
                 const btn = row.querySelector('.remove-movie-btn');
-                btn.style.display = (rows.length > 1) ? '' : 'none';
+                btn.style.display = '';
                 btn.onclick = function () {
                     row.remove();
                     updateRemoveButtons();
                 };
             });
         }
-        updateRemoveButtons();
 
     </script>
 
