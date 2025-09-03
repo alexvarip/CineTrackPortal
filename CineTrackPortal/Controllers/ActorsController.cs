@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace CineTrackPortal.Controllers
 {
@@ -122,7 +123,7 @@ namespace CineTrackPortal.Controllers
             {
                 foreach (var newMovie in NewMovies)
                 {
-                    // Only add if both names are provided
+                    // Only add if both fields are provided
                     if (!string.IsNullOrWhiteSpace(newMovie.Title) && newMovie.Date != default)
                     {
                         newMovie.MovieId = Guid.NewGuid();
@@ -130,6 +131,16 @@ namespace CineTrackPortal.Controllers
                         actor.Movies.Add(newMovie);
                     }
                 }
+            }
+
+            bool hasExisting = actor.Movies != null && actor.Movies.Count > 0;
+            bool hasNew = (NewMovies != null) && NewMovies.Any(a =>
+                !string.IsNullOrWhiteSpace(a.Title));
+            if (!hasExisting && !hasNew)
+            {
+                ModelState.AddModelError("", "Please select at least one existing movie or add a new one.");
+                PopulateMoviesDropDownList(selectedMovies);
+                return View(actor);
             }
 
             // Check for existing actor by Last Name (case-insensitive)

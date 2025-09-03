@@ -155,6 +155,16 @@ namespace CineTrackPortal.Controllers
                 }
             }
 
+            bool hasExisting = movie.Actors != null && movie.Actors.Count > 0;
+            bool hasNew = (NewActors != null) && NewActors.Any(a =>
+                !string.IsNullOrWhiteSpace(a.FirstName) && !string.IsNullOrWhiteSpace(a.LastName));
+            if (!hasExisting && !hasNew)
+            {
+                ModelState.AddModelError("", "Please select at least one existing actor or add a new one.");
+                PopulateActorsDropDownList(selectedActors);
+                return View(movie);
+            }
+
             // Check for existing movie by title (case-insensitive)
             var exists = await _context.Movies
                 .AnyAsync(m => m.Title.ToLower() == movie.Title.ToLower());
