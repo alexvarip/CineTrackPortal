@@ -24,6 +24,7 @@
             <div class="manage-subtitle">Enter movie details below</div>
         </div>
         <div class="card-body">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <form asp-action="Create" method="post" class="mb-0">
                 <div class="mb-3">
                     <label asp-for="Title" class="form-label"></label>
@@ -49,22 +50,11 @@
                     <small class="form-text text-muted">You can search and select multiple actors.</small>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Or Add New Actors</label>
-                    <div id="newActorsContainer">
-                        <div class="row g-2 mb-1 new-actor-row">
-                            <div class="col">
-                                <input name="NewActors[0].FirstName" class="form-control" placeholder="First Name" />
-                            </div>
-                            <div class="col">
-                                <input name="NewActors[0].LastName" class="form-control" placeholder="Last Name" />
-                            </div>
-                            <div class="col-auto d-flex align-items-center">
-                                <button type="button" class="btn btn-danger btn-sm remove-actor-btn" style="display:none;">&times;</button>
-                            </div>
-                        </div>
+                    <div id="newActorsContainer"></div>
+                        <button type="button" class="btn btn-outline-primary btn-sm d-inline-flex align-items-center" id="addNewActorBtn">
+                            <i class="bi bi-plus-circle me-1"></i> Add another actor
+                        </button>               
                     </div>
-                    <button type="button" class="btn btn-link p-0" id="addNewActorBtn">+ Add another actor</button>
-                </div>
                 <div class="d-flex gap-2 mt-3">
                     <button type="submit" class="btn btn-success px-4"><i class="bi bi-save me-1"></i>Save</button>
                     <a asp-action="Index" class="btn btn-secondary px-4"><i class="bi bi-x-circle me-1"></i>Cancel</a>
@@ -90,7 +80,7 @@
         });
 
 
-        let actorIndex = 1;
+        let actorIndex = 0;
         document.getElementById('addNewActorBtn').addEventListener('click', function (e) {
             e.preventDefault();
             const container = document.getElementById('newActorsContainer');
@@ -112,19 +102,38 @@
             updateRemoveButtons();
         });
 
+        $('form').on('submit', function (e) {
+                 let hasEmptyNewActor = false;
+                 $('.new-actor-row').each(function () {
+                     const firstName = $(this).find('input[name*="FirstName"]').val().trim();
+                     const lastName = $(this).find('input[name*="LastName"]').val().trim();
+                     if (!firstName && !lastName) {
+                         hasEmptyNewActor = true;
+                     }
+                 });
+                 if (hasEmptyNewActor) {
+                     console.log('Preventing submit due to empty new actor row');
+                     e.preventDefault();
+                     alert('Please fill in all new actor fields or remove empty rows before saving.');
+                     return false;
+                 }
+             });
+
+
+
         function updateRemoveButtons() {
-            // Show remove button only if more than one new actor row
+            // Always show the remove button for every row
             const rows = document.querySelectorAll('.new-actor-row');
             rows.forEach(row => {
                 const btn = row.querySelector('.remove-actor-btn');
-                btn.style.display = (rows.length > 1) ? '' : 'none';
+                btn.style.display = '';
                 btn.onclick = function () {
                     row.remove();
                     updateRemoveButtons();
                 };
             });
         }
-        updateRemoveButtons();
+        
 
     </script>
 
