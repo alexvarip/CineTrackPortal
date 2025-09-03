@@ -40,7 +40,7 @@ An ASP.NET Core MVC (Razor Views) web-based application for cinema records manag
    - dotnet run
 
 5. **Access the app:**
-   - Open your browser and navigate to `https://localhost:5001` or `http://localhost:5288`.
+   - Open your browser and navigate to `https://localhost:5000` or `http://localhost:5288`.
 
 > **Note:** 
 > - If you restore the database from a SQL backup file, you usually do not need to apply migrations unless new migrations have been added since the backup was created. 
