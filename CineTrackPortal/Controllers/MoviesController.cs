@@ -17,10 +17,12 @@ namespace CineTrackPortal.Controllers
     {
         private readonly ApplicationDbContext _context;
         private const int PageSize = 10;
+        private readonly IWebHostEnvironment _env;
 
-        public MoviesController(ApplicationDbContext context)
+        public MoviesController(ApplicationDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
 
@@ -82,7 +84,8 @@ namespace CineTrackPortal.Controllers
                 return NotFound();
 
             // Read CSV at runtime and find matching row
-            var csvPath = Path.Combine(Directory.GetCurrentDirectory(), "imdb_movies_mini.csv");
+            var csvPath = Path.Combine(_env.ContentRootPath, "imdb_movies_mini.csv");
+            //var csvPath = Path.Combine(Directory.GetCurrentDirectory(), "imdb_movies_mini.csv"); // Not reliable if the working directory changes.
             dynamic? csvRow = null;
 
             using (var reader = new StreamReader(csvPath))
